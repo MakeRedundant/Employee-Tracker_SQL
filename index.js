@@ -1,5 +1,5 @@
 const inquirer = require("inquirer");
-const conn = require("./DB/connection");
+const connection = require("./DB/connection");
 
 const inquirerTracker = () => {
   inquirer
@@ -25,7 +25,6 @@ const inquirerTracker = () => {
       ],
     })
     .then((answer) => {
-
       switch (answer.start) {
         case "View All Employees":
           ViewAllEmployees();
@@ -119,7 +118,7 @@ function ViewAllEmployees() {
 function ViewAllEmployeesByDepartment() {
   // Contains departments: Marketing, Accounting, EEngineering, HR, Legal
   inquirer
-   // Inquirer prompt for department selection 
+    // Inquirer prompt for department selection
     .prompt({
       name: "department",
       type: "list",
@@ -152,21 +151,30 @@ function ViewAllEmployeesByDepartment() {
 
   // Shows Employer by department, with id, first name, last name, title
   function EmployeesByDepartment(department) {
+    // Select statements to specify which columns to retrieve (i.e. employee id)
     const query = `
-       SELECT employee.id, 
-       employee.first_name, 
-       employee.last_name, 
-       role.title, 
-       department.name AS department 
-       FROM employee 
-       LEFT JOIN role ON employee.role_id = role.id 
-       LEFT JOIN department ON role.department_id = department.id 
-       WHERE department.name = ?;
-       `;
+        SELECT 
+            employee.id, 
+            employee.first_name, 
+            employee.last_name, 
+            role.title, 
+            department.name AS department 
+        FROM 
+            employee 
+        LEFT JOIN 
+            role ON employee.role_id = role.id 
+        LEFT JOIN 
+            department ON role.department_id = department.id 
+        WHERE 
+            department.name = ?;
+    `;
+
+    // Uses the LEFT JOIN to connect the Employee table with the role table (all records from the left table are included along with matching records from the right)
+    // WHERE clause in an SQL query is used to specify a condition that must be met, and ? is a placeholder
     connection.query(query, department, (err, data) => {
       if (err) throw err;
       console.table(data);
-      mainMenu();
+      inquirerTracker(); 
     });
   }
 }
@@ -174,7 +182,8 @@ function ViewAllEmployeesByDepartment() {
 // View all employees by manager
 function ViewAllEmployeesByManager() {
   // Contains managers: first name, last name
-  const query = `SELECT 
+  const query = `
+  SELECT 
      employee.id, 
      employee.first_name, 
      employee.last_name, 
@@ -182,15 +191,19 @@ function ViewAllEmployeesByManager() {
      department.name AS 
      department, 
      CONCAT(manager.first_name, ' ', manager.last_name) AS manager 
-     FROM employee 
-     LEFT JOIN role ON employee.role_id = role.id 
-     LEFT JOIN department ON role.department_id = department.id 
-     LEFT JOIN employee manager ON manager.id = employee.manager_id 
+   FROM
+      employee 
+   LEFT JOIN 
+     role ON employee.role_id = role.id 
+   LEFT JOIN
+      department ON role.department_id = department.id 
+    LEFT JOIN
+      employee manager ON manager.id = employee.manager_id 
      ORDER BY manager;`;
   connection.query(query, (err, data) => {
     if (err) throw err;
     console.table(data);
-    mainMenu();
+    inquirerTracker();
   });
 }
 
@@ -199,7 +212,12 @@ function ViewAllEmployeesByManager() {
 function AddEmployee() {
   let userInput1;
   // display a list as choice includes all roles
-  const query = `SELECT id, title FROM role WHERE title NOT LIKE '%Manager%';`;
+  const query = `
+SELECT 
+  id, title 
+FROM 
+ role 
+WHERE title NOT LIKE '%Manager%';`;
 
   Promise.resolve()
     .then(() => {
@@ -239,14 +257,20 @@ function AddEmployee() {
       // console.log("answer1", answer); //returns { first_name: 'a', last_name: 'b', role: 'Salesperson' }
       userInput1 = answer;
       // display manager id, first name, last name as managers
-      const query2 = `SELECT 
+      const query2 = `
+    SELECT 
         manager.id as manager_id,
         CONCAT(manager.first_name, ' ', manager.last_name) AS manager_name
-        FROM employee
-        LEFT JOIN role ON employee.role_id = role.id
-        LEFT JOIN employee AS manager ON manager.id = employee.manager_id 
-        WHERE manager.id IS NOT NULL
-        GROUP BY manager_id;`;
+    FROM
+         employee
+    LEFT JOIN
+         role ON employee.role_id = role.id
+    LEFT JOIN
+         employee AS manager ON manager.id = employee.manager_id 
+    WHERE
+         manager.id IS NOT NULL
+    GROUP BY
+         manager_id;`;
       return new Promise((resolve, reject) => {
         connection.query(query2, (err, data) => {
           if (err) reject(err);
@@ -271,7 +295,6 @@ function AddEmployee() {
       ]);
     })
     .then((answer) => {
-      //console.log("line 274 answer2", userInput1,answer);
       // add ee to db based on user input
       const query = `INSERT INTO employee 
         (first_name, last_name, role_id, manager_id) 
@@ -352,7 +375,6 @@ function RemoveEmployee() {
 
 //  Update employee roles
 function UpdateEmployeeRole() {
-  
   const query = `SELECT first_name, last_name FROM employee;`;
   connection.query(query, (err, data) => {
     // map all ee's to an array
@@ -506,7 +528,7 @@ function ViewAllRoles() {
   connection.query(query, (err, data) => {
     if (err) throw err;
     console.table(data);
-    mainMenu();
+    inquirerTracker();
   });
 }
 
@@ -625,7 +647,7 @@ function ViewAllDepartments() {
   connection.query(query, (err, data) => {
     if (err) throw err;
     console.table(data);
-    mainMenu();
+    inquirerTracker();
   });
 }
 
@@ -711,10 +733,9 @@ function RemoveDepartment() {
 }
 
 // Finally exits the applications
-
 function Exit() {
   console.log("Employee_Tracker is closed");
   connection.end();
 }
 
-mainMenu();
+inquirerTracker();
