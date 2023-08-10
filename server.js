@@ -15,7 +15,7 @@ app.use(express.json());                           // Parse JSON data
 
 // Default response for any other request (Not Found)
 app.use((req, res) => {
-  res.status(404).end(); //.end() is aexpress method that ends the response without sending any more data
+  res.status(404).end(); //.end() is a express method that ends the response without sending any more data
 });
 
 // Start the server
