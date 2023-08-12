@@ -14,9 +14,10 @@ VALUES  ('Marketing Manager', 100000, 1),
         ('Accountant', 6000, 2),
         ('Tech Lead', 150000, 3),
         ('Software Engineer', 900000, 3),
-        ('HR Manager', 90, 4),
-        ('Recruiter', 50000, 4),
-        ('Corporate Lawyer', 100000, 5);
+        ('HR Manager', 90, 5),
+        ('Recruiter', 50000, 5),
+        ('Corporate Lawyer', 100000, 6);
+        ('Front End Developer', 12345, 4);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES  ('Chuck', 'Norris', 1, NULL),
@@ -28,4 +29,4 @@ VALUES  ('Chuck', 'Norris', 1, NULL),
         ('Leo', 'Dicaprio', 7, NULL),
         ('John', 'Wick', 8, 7),
         ('Michael', 'Scott', 9, NULL);
-        ('Average', 'Joe', 6, 5);
+        ('Average', 'Joe', 10, 5);
