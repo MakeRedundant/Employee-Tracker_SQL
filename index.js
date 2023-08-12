@@ -1,6 +1,9 @@
 const inquirer = require("inquirer");
 const connection = require("./DB/connection");
 
+console.log("Welcome to the Employee Tracker_SQL!");
+init();
+
 const terminalAscii = () => {
   const asciiArt = `
 ___________                 .__                                     ___________                         __                    
