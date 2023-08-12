@@ -1,8 +1,8 @@
 const inquirer = require("inquirer");
 const connection = require("./DB/connection");
 
-console.log("Welcome to the Employee Tracker_SQL!");
-init();
+console.log("Welcome!\nStarting the Employee Tracker_SQL!");
+// \n is for starting a new line 
 
 const terminalAscii = () => {
   const asciiArt = `
@@ -16,7 +16,9 @@ ___________                 .__                                     ___________ 
         by Brian Trang`;
   console.log(asciiArt);
 }
+terminalAscii();
 
+//textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Red%20Phoenix&text=
 
 const inquirerTracker = () => {
   inquirer
@@ -186,7 +188,6 @@ function ViewAllEmployeesByDepartment() {
             department.name = ?;
     `;
 
-    terminalAscii();
 
     // Uses the LEFT JOIN to connect the Employee table with the role table (all records from the left table are included along with matching records from the right)
     // WHERE clause in an SQL query is used to specify a condition that must be met, and ? is a placeholder
@@ -197,3 +198,12 @@ function ViewAllEmployeesByDepartment() {
     });
   }
 }
+
+// Exits the application
+function Exit() {
+  console.log("Closing the Employee_Tracker_SQL \n GOODBYE!");
+  connection.end();
+}
+
+
+inquirerTracker();
