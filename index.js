@@ -1,6 +1,19 @@
 const inquirer = require("inquirer");
 const connection = require("./DB/connection");
 
+const terminalAscii = () => {
+  const asciiArt = `
+___________                 .__                                     ___________                         __                    
+\\_   _____/  _____  ______  |  |    ____  ___.__.  ____   ____      \\__    ___/_______ _____     ____  |  | __  ____ _______  
+ |    __)_  /     \\ \\____ \\ |  |   /  _ \\<   |  |_/ __ \\_/ __ \\       |    |   \\_  __ \\\\__  \\  _/ ___\\ |  |/ /_/ __ \\\\__  __ \\ 
+ |        \\|  Y Y  \\|  |_> >|  |__(  <_> )\\___  |\\  ___/\\  ___/       |    |    |  | \\/ / __ \\_\\  \\___ |    < \\  ___/ |  | \\/ 
+/_______  /|__|_|  /|   __/ |____/ \\____/ / ____| \\___  >\\___  >      |____|    |__|   (____  / \\___  >|__|_ \\ \\___  >|__|    
+        \\/       \\/ |__|                  \\/          \\/     \\/                             \\/      \\/      \\/     \\/         
+                                                                                                                                         
+        by Brian Trang`;
+  console.log(asciiArt);
+}
+
 
 const inquirerTracker = () => {
   inquirer
@@ -169,6 +182,8 @@ function ViewAllEmployeesByDepartment() {
         WHERE 
             department.name = ?;
     `;
+
+    terminalAscii();
 
     // Uses the LEFT JOIN to connect the Employee table with the role table (all records from the left table are included along with matching records from the right)
     // WHERE clause in an SQL query is used to specify a condition that must be met, and ? is a placeholder
