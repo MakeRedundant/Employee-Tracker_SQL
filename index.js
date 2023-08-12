@@ -1,11 +1,13 @@
 //Require modules
 const inquirer = require("inquirer");
 const connection = require("./DB/connection");
+const mysql = require("mysql2");
+const db = require("./DB/connection.js");
 
 require("console.table"); //module that displays table data in a nicer format within the terminal
 
 console.log("Welcome!\nStarting the Employee Tracker_SQL");
-// \n is for starting a new line 
+// \n is for starting a new line
 
 const terminalAscii = () => {
   const asciiArt = `
@@ -18,13 +20,14 @@ ___________                 .__                                     ___________ 
                                                                                                                                          
         by Brian Trang`;
   console.log(asciiArt);
-}//textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Red%20Phoenix&text=
+}; //textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Red%20Phoenix&text=
 terminalAscii();
 
-// Start of inquirer 
- //User input questions
+
+// Start of inquirer
+//User input questions
 const inquirerTracker = () => {
-  inquirer
+ return inquirer
     .prompt({
       name: "start",
       type: "list",
@@ -47,8 +50,8 @@ const inquirerTracker = () => {
       ],
     })
     //then method calls on a promise(answer). The back function within the then() method is executed when the promise is resolved.
-     // Inside the callback function theres a switch statement that checks the user selection (answer.start) 
-      //depending on that it starts the corresponding function
+    // Inside the callback function theres a switch statement that checks the user selection (answer.start)
+    //depending on that it starts the corresponding function
     .then((answer) => {
       switch (answer.start) {
         case "View All Employees":
@@ -106,7 +109,7 @@ const inquirerTracker = () => {
         case "Exit":
           Exit();
           break;
-      } // case statement is used with switch statement to define specific conditions that need to be checked within the switch block 
+      } // case statement is used with switch statement to define specific conditions that need to be checked within the switch block
       // switch (expression) {
       //   case value1:
       //     // Code to execute if expression equals value1
@@ -142,10 +145,10 @@ function ViewAllEmployees() {
   LEFT JOIN employee manager ON 
     manager.id = employee.manager_id;
 `;
- //Uses the LEFT JOIN to combine data from tables based on their relationship 
+  //Uses the LEFT JOIN to combine data from tables based on their relationship
 
-//Uses conenction.query() method to exectute the query 
- // shows result in the terminal by console.table
+  //Uses conenction.query() method to exectute the query
+  // shows result in the terminal by console.table
   connection.query(query, (err, data) => {
     if (err) throw err;
     console.table(data);
@@ -212,7 +215,7 @@ function ViewAllEmployeesByDepartment() {
     connection.query(query, department, (err, data) => {
       if (err) throw err;
       console.table(data);
-      inquirerTracker(); 
+      inquirerTracker();
     });
   }
 }
@@ -223,5 +226,5 @@ function Exit() {
   connection.end();
 }
 
-
 inquirerTracker();
+
