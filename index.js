@@ -1,7 +1,10 @@
+//Require modules
 const inquirer = require("inquirer");
 const connection = require("./DB/connection");
 
-console.log("Welcome!\nStarting the Employee Tracker_SQL!");
+require("console.table"); //module that displays table data in a nicer format within the terminal
+
+console.log("Welcome!\nStarting the Employee Tracker_SQL");
 // \n is for starting a new line 
 
 const terminalAscii = () => {
@@ -15,11 +18,11 @@ ___________                 .__                                     ___________ 
                                                                                                                                          
         by Brian Trang`;
   console.log(asciiArt);
-}
+}//textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Red%20Phoenix&text=
 terminalAscii();
 
-//textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Red%20Phoenix&text=
-
+// Start of inquirer 
+ //User input questions
 const inquirerTracker = () => {
   inquirer
     .prompt({
@@ -43,6 +46,9 @@ const inquirerTracker = () => {
         "Exit",
       ],
     })
+    //then method calls on a promise(answer). The back function within the then() method is executed when the promise is resolved.
+     // Inside the callback function theres a switch statement that checks the user selection (answer.start) 
+      //depending on that it starts the corresponding function
     .then((answer) => {
       switch (answer.start) {
         case "View All Employees":
@@ -100,13 +106,24 @@ const inquirerTracker = () => {
         case "Exit":
           Exit();
           break;
-      }
+      } // case statement is used with switch statement to define specific conditions that need to be checked within the switch block 
+      // switch (expression) {
+      //   case value1:
+      //     // Code to execute if expression equals value1
+      //     break;
+      //   case value2:
+      //     // Code to execute if expression equals value2
+      //     break;
+      //   // Additional cases...
+      //   default:
+      //     // Code to execute if none of the cases match
     });
 };
 
 // View all employees
 function ViewAllEmployees() {
   // Contains: id, first name, last name, title, department, salary, manager
+  //this  Defines a SQL query using a template string
   const query = ` 
   SELECT 
     employee.id, 
@@ -125,7 +142,10 @@ function ViewAllEmployees() {
   LEFT JOIN employee manager ON 
     manager.id = employee.manager_id;
 `;
-  // show result in the terminal by console.table
+ //Uses the LEFT JOIN to combine data from tables based on their relationship 
+
+//Uses conenction.query() method to exectute the query 
+ // shows result in the terminal by console.table
   connection.query(query, (err, data) => {
     if (err) throw err;
     console.table(data);
@@ -166,7 +186,7 @@ function ViewAllEmployeesByDepartment() {
         case "Legal":
           return EmployeesByDepartment("Legal");
       }
-    });
+    }); // There are no break statements here and instead I use return instead to make it more simplistic
 
   // Shows Employer by department, with id, first name, last name, title
   function EmployeesByDepartment(department) {
@@ -187,8 +207,6 @@ function ViewAllEmployeesByDepartment() {
         WHERE 
             department.name = ?;
     `;
-
-
     // Uses the LEFT JOIN to connect the Employee table with the role table (all records from the left table are included along with matching records from the right)
     // WHERE clause in an SQL query is used to specify a condition that must be met, and ? is a placeholder
     connection.query(query, department, (err, data) => {
