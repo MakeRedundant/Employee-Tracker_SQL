@@ -4,6 +4,9 @@ const connection = require("./DB/connection");
 const mysql = require("mysql2");
 const db = require("./DB/connection.js");
 
+
+require ("dotenv").config();
+
 require("console.table"); //module that displays table data in a nicer format within the terminal
 
 console.log("Welcome!\nStarting the Employee Tracker_SQL");
