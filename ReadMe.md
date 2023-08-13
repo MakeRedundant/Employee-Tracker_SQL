@@ -2,7 +2,7 @@
 ![Github licence](http://img.shields.io/badge/license-MIT-blue.svg)
 ![Inquirer Version](https://img.shields.io/badge/Inquirer-8.2.4-blue.svg)
 ![JavaScript Badge](https://img.shields.io/badge/JavaScript-100%25-yellow.svg)
-![console.table](https://img.shields.io/npm/v/console.table.svg)
+![console.table](https://img.shields.io/console.table/v/console.table.svg)
 ![dotenv](https://img.shields.io/npm/v/dotenv.svg?color=green)
 ![mysql2](https://img.shields.io/npm/v/mysql2.svg?color=orange)
    
