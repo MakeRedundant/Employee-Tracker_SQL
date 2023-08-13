@@ -749,14 +749,14 @@ const inquirerTracker = () => {
             if (res.length === 0) {
               console.log(`Department with name ${name} does not exist.`);
             } else {
-              // Check if there are roles associated with the department
+              // Checks if there are roles associated with the department for error handling
               db.query("SELECT * FROM role WHERE department_id = ?", [res[0].id], (err, roleRes) => {
                 if (err) throw err;
   
                 if (roleRes.length > 0) {
                   console.log(`Cannot remove department ${name} because there are roles associated with it.`);
                 } else {
-                  // No roles associated, safe to delete the department
+                  // No roles associated, it is safe to delete the department
                   db.query("DELETE FROM department WHERE name = ?", [name], (err, deleteRes) => {
                     if (err) throw err;
   
