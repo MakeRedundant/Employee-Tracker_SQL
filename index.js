@@ -26,8 +26,6 @@ ___________                 .__                                     ___________ 
 }; //textkool.com/en/ascii-art-generator?hl=default&vl=default&font=Red%20Phoenix&text=
 terminalAscii();
 
-
-
 // Start of inquirer
 //User input questions
 const inquirerTracker = () => {
@@ -726,51 +724,59 @@ const inquirerTracker = () => {
        });
    }
    
- // Remove department
- function RemoveDepartment() {
-   db.query("SELECT name FROM department", (err, data) => {
-     if (err) {
-       console.error('Error fetching departments: ' + err.stack);
-       return;
-     }
- 
-     const departments = data.map((department) => department.name);
- 
-     inquirer
-       .prompt([
-         {
-           type: "list",
-           name: "name",
-           message: "Select a department you want to remove?",
-           choices: [...departments],
-         },
-       ])
-       .then((selectedDepartment) => {
-         const departmentName = selectedDepartment.name;
- 
-         db.query(
-           "DELETE FROM department WHERE name = ?",
-           [departmentName],
-           (err, res) => {
-             if (err) {
-               console.error('Error while removing department: ' + err.stack);
-               return;
-             }
- 
-             if (res.affectedRows === 0) {
-               console.log(`Department with name ${departmentName} does not exist.`);
-             } else {
-               console.table({
-                 message: `${departmentName} has been removed.\n`,
-                 affectedRows: res.affectedRows,
-               });
-               ViewAllDepartments();
-             }
-           }
-         );
-       });
-   });
- }
+  // Remove department
+  function RemoveDepartment() {
+    db.query("SELECT department.name FROM department", (err, data) => {
+      if (err) throw err;
+      const department = data.map((dept) => dept.name);
+  
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            name: "name",
+            message: "Select a department you want to remove?",
+            choices: [...department],
+          },
+        ])
+        .then((answer) => {
+          const { name } = answer;
+  
+          // Check if the department exists
+          db.query("SELECT * FROM department WHERE name = ?", [name], (err, res) => {
+            if (err) throw err;
+  
+            if (res.length === 0) {
+              console.log(`Department with name ${name} does not exist.`);
+            } else {
+              // Check if there are roles associated with the department
+              db.query("SELECT * FROM role WHERE department_id = ?", [res[0].id], (err, roleRes) => {
+                if (err) throw err;
+  
+                if (roleRes.length > 0) {
+                  console.log(`Cannot remove department ${name} because there are roles associated with it.`);
+                } else {
+                  // No roles associated, safe to delete the department
+                  db.query("DELETE FROM department WHERE name = ?", [name], (err, deleteRes) => {
+                    if (err) throw err;
+  
+                    if (deleteRes.affectedRows === 0) {
+                      console.log(`Department with name ${name} does not exist.`);
+                    } else {
+                      console.table({
+                        message: `\n${name} has been removed.\n`,
+                        affectedRows: deleteRes.affectedRows,
+                      });
+                      ViewAllDepartments();
+                    }
+                  });
+                }
+              });
+            }
+          });
+        });
+    });
+  }
  
  // Exits the application
  function Exit() {
