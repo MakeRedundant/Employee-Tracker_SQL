@@ -3,8 +3,9 @@
 ![Inquirer Version](https://img.shields.io/badge/Inquirer-8.2.4-blue.svg)
 ![JavaScript Badge](https://img.shields.io/badge/JavaScript-100%25-yellow.svg)
 ![dotenv](https://img.shields.io/npm/v/dotenv.svg?color=green)
-![mysql2](https://img.shields.io/npm/v/mysql2.svg?color=orange)
-   
+![SQL](https://img.shields.io/badge/language-SQL-orange)
+
+
 ## Description 
 A command-line application used to manage a company's employee database, using Node.js, Inquirer, and MySQL.
   
